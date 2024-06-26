@@ -107,15 +107,14 @@ bool stopwatch_face_loop(movement_event_t event, movement_settings_t *settings, 
                 _stopwatch_face_update_display(stopwatch_state, true);
             }
             break;
-        case EVENT_LIGHT_BUTTON_DOWN:
-            movement_illuminate_led();
+        case EVENT_ALARM_LONG_PRESS:
             if (!stopwatch_state->running) {
                 stopwatch_state->start_time.reg = 0;
                 stopwatch_state->seconds_counted = 0;
                 watch_display_string("st  000000", 0);
             }
             break;
-        case EVENT_ALARM_BUTTON_DOWN:
+        case EVENT_ALARM_BUTTON_UP:
             if (settings->bit.button_should_sound) {
                 watch_buzzer_play_note(BUZZER_NOTE_C8, 50);
             }
