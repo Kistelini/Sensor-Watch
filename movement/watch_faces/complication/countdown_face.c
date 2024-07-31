@@ -212,18 +212,6 @@ bool countdown_face_loop(movement_event_t event, movement_settings_t *settings, 
             break;
         case EVENT_LIGHT_BUTTON_UP:
             switch(state->mode) {
-                case cd_running:
-                    movement_illuminate_led();
-                    break;
-                case cd_paused:
-                    reset(state);
-                    button_beep(settings);
-                    break;
-                case cd_reset:
-                    state->mode = cd_setting;
-                    movement_request_tick_frequency(4);
-                    button_beep(settings);
-                    break;
                 case cd_setting:
                     state->selection++;
                     if(state->selection >= CD_SELECTIONS) {
@@ -233,6 +221,9 @@ bool countdown_face_loop(movement_event_t event, movement_settings_t *settings, 
                         movement_request_tick_frequency(1);
                         button_beep(settings);
                     }
+                    break;
+                default:
+                    movement_illuminate_led();
                     break;
             }
             draw(state, event.subsecond);
@@ -261,6 +252,9 @@ bool countdown_face_loop(movement_event_t event, movement_settings_t *settings, 
             if (state->mode == cd_setting) {
                 quick_ticks_running = true;
                 movement_request_tick_frequency(8);
+            } else if (state->mode == cd_paused) {
+                reset(state);
+                button_beep(settings);
             }
             break;
         case EVENT_LIGHT_LONG_PRESS:
@@ -276,6 +270,10 @@ bool countdown_face_loop(movement_event_t event, movement_settings_t *settings, 
                         state->seconds = 0;
                         break;
                 }
+            } else if (state->mode == cd_reset) {
+                state->mode = cd_setting;
+                movement_request_tick_frequency(4);
+                button_beep(settings);
             }
             break;
         case EVENT_ALARM_LONG_UP:
