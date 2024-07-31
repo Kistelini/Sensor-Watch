@@ -63,18 +63,18 @@ bool counter_face_loop(movement_event_t event, movement_settings_t *settings, vo
                 beep_counter(state);
             }
             break;
-        case EVENT_LIGHT_LONG_PRESS:
-            watch_buzzer_abort_sequence();
-            state->beep_on = !state->beep_on;
-            if (state->beep_on) {
-                watch_set_indicator(WATCH_INDICATOR_SIGNAL);
-            } else {
-                watch_clear_indicator(WATCH_INDICATOR_SIGNAL);
-            }
-            break;
         case EVENT_ALARM_LONG_PRESS:
-            state->counter_idx=0; // reset counter index
-            print_counter(state);
+            if (state->counter_idx == 0) {
+                state->beep_on = !state->beep_on;
+                if (state->beep_on) {
+                    watch_set_indicator(WATCH_INDICATOR_SIGNAL);
+                } else {
+                    watch_clear_indicator(WATCH_INDICATOR_SIGNAL);
+                }
+            } else {
+                state->counter_idx=0; // reset counter index
+                print_counter(state);
+            }
             break;
         case EVENT_ACTIVATE:
             print_counter(state);
