@@ -34,7 +34,7 @@ void counter_face_setup(movement_settings_t *settings, uint8_t watch_face_index,
         *context_ptr = malloc(sizeof(counter_state_t));
         memset(*context_ptr, 0, sizeof(counter_state_t));
         counter_state_t *state = (counter_state_t *)*context_ptr;
-        state->beep_on = true;
+        state->beep_on = settings->bit.button_should_sound;
     }
 }
 
